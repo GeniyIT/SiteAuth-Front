@@ -16,12 +16,13 @@
                 </div>
                 <button class="form__button" type="submit">Submit</button>
             </form>
+            <RouterLink class="SignUp" to="/SignUp">SignUp</RouterLink>
         </div>
     </div>
 </template>
 
 <script setup>
-import {ref, watch} from "vue";
+import {ref} from "vue";
 import router from "@/router/index.js";
 import axios from "axios";
 
@@ -43,10 +44,15 @@ const handleSubmit = () => {
             errorMessage.value = 'Invalid credentials'
         })
 }
-watch
 </script>
 
 <style>
+.SignUp{
+    cursor: pointer;
+    text-decoration: none;
+    color: #00000099;
+}
+
 .login-page{
     display: flex;
     justify-content: center;
@@ -105,6 +111,7 @@ watch
     padding-left: 16px;
 }
 .form__button{
+    cursor: pointer;
     border: none;
     background-color: white;
     margin-top: 7px;

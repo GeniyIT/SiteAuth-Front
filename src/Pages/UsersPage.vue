@@ -1,6 +1,8 @@
 <template>
     <div class="users-page">
-        <div class="users-list">
+        <h1 v-if="isLoading"></h1>
+        <h1 v-else-if="errorMessage" class="profile-page__error">{{ errorMessage }}</h1>
+        <div v-else class="users-list">
             <div class="users-list__item" v-for="user in users" :key="user.id">
                 <h1 class="users-list__name">{{user.name + user.lastName}}</h1>
                 <p class="users-list__email">{{user.email}}</p>
@@ -10,7 +12,31 @@
 </template>
 
 <script setup>
-import {inject} from "vue";
+import {inject, ref} from "vue";
+import axios from "axios";
+
+const isLoading = ref(true)
+let errorMessage = ref('')
+
+axios.post('http://localhost:3000/auth', {
+    token: localStorage.getItem('token'),
+    refreshToken: localStorage.getItem('refreshToken')
+})
+    .then(data => {
+        if(data.data.token){
+            isLoading.value = false
+            localStorage.setItem('token', data.data.token)
+            thisUsers.value = data.data.user
+        } else {
+            isLoading.value = false
+            thisUsers.value = data.data.user
+            console.log(data.data.user)
+        }
+    })
+    .catch((error) => {
+        isLoading.value = false
+        errorMessage.value = error.response.data.message
+    })
 
 const users = inject('users')
 </script>
